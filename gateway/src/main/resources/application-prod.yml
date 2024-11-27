@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+server:
+  port: ${SERVER_PORT}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DEFAULT_ZONE}
+
+service:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
