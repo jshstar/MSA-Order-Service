@@ -20,7 +20,9 @@ public class JwtAuthorizationFilter implements GlobalFilter {
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		String path = exchange.getRequest().getURI().getPath();
-
+		if (isPublicPath(path)) {
+			return chain.filter(exchange);
+		}
 		Claims claims = (Claims) exchange.getAttributes().get("claims");
 
 		if (claims == null) {
@@ -44,6 +46,12 @@ public class JwtAuthorizationFilter implements GlobalFilter {
 			return false;
 		}
 		return true;
+	}
+
+	private boolean isPublicPath(String path) {
+		return path.equals("/auth/signIn") ||
+			path.equals("/auth/signUp") ||
+			path.equals("/products");
 	}
 
 
