@@ -19,6 +19,7 @@ public class CustomAddServerPortHeaderPostFilter implements GlobalFilter {
 
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain){
+		log.info("gateway");
 		return chain.filter(exchange).then(Mono.fromRunnable(() -> addServerPortInResponseHeader(exchange)));
 	}
 
