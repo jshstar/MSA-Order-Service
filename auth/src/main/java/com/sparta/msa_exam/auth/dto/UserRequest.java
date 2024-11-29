@@ -3,7 +3,8 @@ package com.sparta.msa_exam.auth.dto;
 import lombok.Getter;
 
 @Getter
-public class MemberRequest {
+public class UserRequest {
+
 	String username;
-	String Password;
+	String password;
 }

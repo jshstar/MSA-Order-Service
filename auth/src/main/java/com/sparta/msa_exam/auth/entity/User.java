@@ -1,6 +1,9 @@
 package com.sparta.msa_exam.auth.entity;
 
-import com.sparta.msa_exam.auth.common.MemberRole;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.sparta.msa_exam.auth.common.UserRole;
+import com.sparta.msa_exam.auth.dto.UserRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +24,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+@Table(name = "p_user")
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +39,14 @@ public class Member {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "user_role", nullable = false)
-	private MemberRole userRole;
+	private UserRole userRole;
 
+	public static User create(UserRequest request, PasswordEncoder passwordEncoder){
+		return User.builder()
+			.username(request.getUsername())
+			.password(passwordEncoder.encode(request.getPassword()))
+			.userRole(UserRole.USER)
+			.build();
+	}
 
 }
