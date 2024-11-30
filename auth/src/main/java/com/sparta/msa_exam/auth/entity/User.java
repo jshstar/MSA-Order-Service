@@ -3,9 +3,11 @@ package com.sparta.msa_exam.auth.entity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sparta.msa_exam.auth.common.UserRole;
-import com.sparta.msa_exam.auth.dto.UserRequest;
+import com.sparta.msa_exam.auth.valueobject.Password;
+import com.sparta.msa_exam.auth.valueobject.Username;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,20 +33,26 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "username", nullable = false, unique = true)
-	private String username;
+	@Embedded
+	private Username username;
 
-	@Column(name = "password", nullable = false)
-	private String password;
+	@Embedded
+	private Password password;
+
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "user_role", nullable = false)
 	private UserRole userRole;
 
-	public static User create(UserRequest request, PasswordEncoder passwordEncoder){
+	public boolean isPasswordMatch(Password rawPassword, PasswordEncoder encoder) {
+		return this.password.matches(rawPassword, encoder);
+	}
+
+	public static User create(Username userName, Password password, PasswordEncoder encoder){
+		Password encodePassword = password.encode(encoder);
 		return User.builder()
-			.username(request.getUsername())
-			.password(passwordEncoder.encode(request.getPassword()))
+			.username(userName)
+			.password(encodePassword)
 			.userRole(UserRole.USER)
 			.build();
 	}

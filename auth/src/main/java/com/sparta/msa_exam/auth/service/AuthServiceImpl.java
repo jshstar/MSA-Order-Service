@@ -9,6 +9,8 @@ import com.sparta.msa_exam.auth.common.exception.AuthException;
 import com.sparta.msa_exam.auth.dto.UserRequest;
 import com.sparta.msa_exam.auth.entity.User;
 import com.sparta.msa_exam.auth.repository.UserRepository;
+import com.sparta.msa_exam.auth.valueobject.Password;
+import com.sparta.msa_exam.auth.valueobject.Username;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,25 +27,30 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	@Transactional(readOnly = true)
 	public String signIn(UserRequest userRequest) {
-		User user = userRepository.findByUsername(userRequest.getUsername())
+		Username username = new Username(userRequest.getUsername());
+		Password password = new Password(userRequest.getPassword());
+		User user = userRepository.findByUsername(username)
 			.orElseThrow(() -> new AuthException(AuthErrorCode.NOT_FOUND_USER));
 
-		if (!passwordEncoder.matches(userRequest.getPassword(), user.getPassword())) {
+		if (!user.isPasswordMatch(password, passwordEncoder)) {
 			throw new AuthException(AuthErrorCode.INVALID_PASSWORD);
 		}
 
-		return jwtService.generateToken(user.getUsername());
+		return jwtService.generateToken(username.getValue());
 	}
 
 
 	@Override
 	@Transactional
 	public void signUp(UserRequest userRequest) {
-		if (userRepository.existsByUsername(userRequest.getUsername())) {
+		Username username = new Username(userRequest.getUsername());
+		Password password = new Password(userRequest.getPassword());
+
+		if (userRepository.existsByUsername(username)) {
 			throw new AuthException(AuthErrorCode.DUPLICATE_USER);
 		}
 
-		User user = User.create(userRequest, passwordEncoder);
+		User user = User.create(username, password, passwordEncoder);
 		userRepository.save(user);
 	}
 }
