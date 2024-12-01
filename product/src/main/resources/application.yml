@@ -1,11 +1,4 @@
 spring:
   profiles:
     active: dev
-  application:
-    name: product-service
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
