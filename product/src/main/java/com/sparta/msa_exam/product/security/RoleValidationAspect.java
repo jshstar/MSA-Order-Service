@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.sparta.msa_exam.product.client.AuthClient;
 import com.sparta.msa_exam.product.common.code.ProductErrorCode;
-import com.sparta.msa_exam.product.dto.AuthValidationResponse;
+import com.sparta.msa_exam.product.client.dto.AuthValidationResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
