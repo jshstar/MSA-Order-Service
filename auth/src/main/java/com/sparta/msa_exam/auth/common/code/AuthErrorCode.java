@@ -14,7 +14,8 @@ public enum AuthErrorCode {
 	INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 	DUPLICATE_USER(HttpStatus.BAD_REQUEST, "중복된 닉네임 입니다."),
 	USERNAME_EMPTY(HttpStatus.BAD_REQUEST, "유저이름이 없습니다."),
-	PASSWORD_EMPTY(HttpStatus.BAD_REQUEST, "유저이름이 없습니다.");
+	PASSWORD_EMPTY(HttpStatus.BAD_REQUEST, "유저이름이 없습니다."),
+	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "휴효하지 않은 토큰정보입니다.");
 	private final HttpStatus httpStatus;
 	private final String message;
 }
