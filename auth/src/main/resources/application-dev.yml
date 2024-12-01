@@ -1,3 +1,6 @@
+server:
+  port: 19095
+
 spring:
   config:
     activate:
@@ -17,8 +20,6 @@ spring:
         use_sql_comments: true
         dialect: org.hibernate.dialect.MySQLDialect
 
-server:
-  port: 19095
 
 eureka:
   client:

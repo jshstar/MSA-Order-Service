@@ -16,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class AuthConfig {
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		http
 			.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/auth/signIn").permitAll()
-				.requestMatchers("/auth/signUp").permitAll()
+				.requestMatchers("/api/v1/auth/signIn").permitAll()
+				.requestMatchers("/api/v1/auth/signUp").permitAll()
+				.requestMatchers("/api/v1/auth/validate").permitAll()
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session
@@ -31,7 +31,6 @@ public class AuthConfig {
 
 		return http.build();
 	}
-
 
 	@Bean
 	public static PasswordEncoder passwordEncoder() {

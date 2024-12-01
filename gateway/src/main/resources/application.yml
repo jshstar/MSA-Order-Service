@@ -13,17 +13,15 @@ spring:
         - id: order-service
           uri: lb://order-service
           predicates:
-            - Path=/order/**
+            - Path=/api/v1/order/**
         - id: product-service
-          uri: lb://product-service
+          uri: http://localhost:19093
           predicates:
-            - Path=/products/**
+            - Path=/api/v1/products/**
         - id: auth-service
-          uri: lb://auth-service
+          uri: http://localhost:19095
           predicates:
-            - Path=/auth/**
-
-
+            - Path=/api/v1/auth/**
       discovery:
         locator:
           enabled: true
