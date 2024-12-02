@@ -71,6 +71,6 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 	private boolean isPublicPath(String path) {
 		return path.equals("/api/v1/auth/signIn") ||
 			path.equals("/api/v1/auth/signUp") ||
-			path.equals("/api/v1/product");
+			path.equals("/api/v1/products");
 	}
 }
