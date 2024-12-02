@@ -1,5 +1,7 @@
 package com.sparta.msa_exam.order.entity;
 
+import com.sparta.msa_exam.order.valueobject.Quantity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,17 +26,17 @@ import lombok.NoArgsConstructor;
 public class OrderProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id", nullable = false)
 	private Order order;
 
 	@Column(name = "product_id", nullable = false)
-	Long productId;
+	private Long productId;
 
-	@Column(name = "quantity", unique = false)
-	Long quantity;
+	@Column(name = "quantity", nullable = false)
+	private Quantity quantity;
 
 
 }
