@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sparta.msa_exam.order.valueobject.DeliveryRequest;
-import com.sparta.msa_exam.order.valueobject.TotalPrice;
+import com.sparta.msa_exam.order.valueobject.OrderTotalPrice;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,9 +40,31 @@ public class Order {
 	private DeliveryRequest deliveryRequest;
 
 	@Embedded
-	private TotalPrice totalPrice;
+	private OrderTotalPrice totalPrice;
 
 	@Column(name = "user_id")
 	private Long userId;
+
+	public static Order create(DeliveryRequest deliveryRequest, Long userId){
+		return builder()
+			.deliveryRequest(deliveryRequest)
+			.userId(userId)
+			.totalPrice(OrderTotalPrice.zero())
+			.build();
+	}
+
+	public void addOrderProduct(List<OrderProduct> orderProducts) {
+		this.orderProducts = orderProducts;
+	}
+	public void updateTotalPrice() {
+		int total = this.orderProducts.stream()
+			.map(orderProduct -> orderProduct.getTotalPrice().getValue())
+			.reduce(0, Integer::sum);
+
+		this.totalPrice = new OrderTotalPrice(total);
+	}
+
+
+
 
 }

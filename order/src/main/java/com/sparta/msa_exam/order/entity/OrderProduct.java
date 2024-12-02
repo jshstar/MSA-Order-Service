@@ -1,6 +1,7 @@
 package com.sparta.msa_exam.order.entity;
 
 import com.sparta.msa_exam.order.valueobject.Quantity;
+import com.sparta.msa_exam.order.valueobject.TotalPrice;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "name = p_order_product")
+@Table(name = "p_order_product")
 public class OrderProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +40,21 @@ public class OrderProduct {
 	@Embedded
 	private Quantity quantity;
 
+	@Embedded
+	private TotalPrice totalPrice;
+
+	public static OrderProduct create(Long productId, Quantity quantity, Integer unitPrice, Order order){
+		TotalPrice totalPrice = TotalPrice.calculate(unitPrice, quantity.getValue());
+		return builder()
+			.productId(productId)
+			.quantity(quantity)
+			.order(order)
+			.totalPrice(totalPrice)
+			.build();
+	}
+
+	public void addOrder(Order order) {
+		this.order = order;
+	}
 
 }

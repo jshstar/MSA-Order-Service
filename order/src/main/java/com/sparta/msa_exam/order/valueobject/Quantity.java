@@ -21,10 +21,10 @@ public class Quantity {
 
 	public Quantity(Integer value){
 		if(value == null){
-			throw new IllegalArgumentException(new OrderException(OrderErrorCode.ORDER_PRODUCT_QUANTITY_EMPTY));
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.PRODUCT_QUANTITY_EMPTY));
 		}
 		if(value < 0){
-			throw new IllegalArgumentException(new OrderException(OrderErrorCode.ORDER_PRODUCT_QUANTITY_NOT_MINUS));
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.PRODUCT_QUANTITY_NOT_MINUS));
 		}
 		this.value = value;
 	}

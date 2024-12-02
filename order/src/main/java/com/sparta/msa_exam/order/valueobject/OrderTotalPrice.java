@@ -14,19 +14,23 @@ import lombok.NoArgsConstructor;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DeliveryRequest {
+public class OrderTotalPrice {
 
-	@Column(name = "delivery_request", nullable = false)
-	String value;
+	@Column(name = "order_total_price", nullable = false)
+	Integer value;
 
-	public DeliveryRequest(String value){
-		if(value == null || value.trim().isEmpty()){
-			throw new IllegalArgumentException(new OrderException(OrderErrorCode.DELIVERY_REQUEST_EMPTY));
+	public OrderTotalPrice(Integer value){
+		if(value == null){
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.ORDER_TOTAL_PRICE_EMPTY));
+		}
+		if(value < 0){
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.ORDER_TOTAL_PRICE_NOT_MINUS));
 		}
 		this.value = value;
 	}
-	@Override
-	public String toString(){
-		return value;
+
+	public static OrderTotalPrice zero() {
+		return new OrderTotalPrice(0);
 	}
+
 }

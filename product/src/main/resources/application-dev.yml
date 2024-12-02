@@ -37,7 +37,3 @@ management:
       exposure:
         include: refresh
 
-auth:
-  service:
-    url: http://localhost:19095
-

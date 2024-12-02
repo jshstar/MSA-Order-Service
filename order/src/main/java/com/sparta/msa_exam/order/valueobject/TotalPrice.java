@@ -15,17 +15,19 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TotalPrice {
-
-	@Column(name = "quantity", nullable = false)
+	@Column(name = "total_price", nullable = false)
 	Integer value;
 
 	public TotalPrice(Integer value){
 		if(value == null){
-			throw new IllegalArgumentException(new OrderException(OrderErrorCode.ORDER_TOTAL_PRICE_EMPTY));
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.TOTAL_PRICE_EMPTY));
 		}
 		if(value < 0){
-			throw new IllegalArgumentException(new OrderException(OrderErrorCode.ORDER_TOTAL_PRICE_NOT_MINUS));
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.TOTAL_PRICE_NOT_MINUS));
 		}
 		this.value = value;
+	}
+	public static TotalPrice calculate(int unitPrice, int quantity) {
+		return new TotalPrice(unitPrice * quantity);
 	}
 }
