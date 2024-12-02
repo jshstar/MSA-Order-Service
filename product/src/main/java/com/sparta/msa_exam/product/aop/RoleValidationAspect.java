@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.product.security;
+package com.sparta.msa_exam.product.aop;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -29,18 +29,23 @@ public class RoleValidationAspect {
 		String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
 		log.info(token);
 		if (token == null) {
-			log.error("Authorization header is missing or invalid");
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing required headers");
 		}
 
 		AuthValidationResponse response = authClient.validateRole(token);
+		String userRole = response.getUserRole();
+		String[] requiredRoles = requiresRole.value();
 
-		if (!response.getUserRole().equals(requiresRole.value())) {
-			log.error("Access denied: Required role {}, but user has {}", requiresRole.value(), response.getUserRole());
+		boolean hasRole = false;
+		for (String requiredRole : requiredRoles) {
+			if (requiredRole.equals(userRole)) {
+				hasRole = true;
+				break;
+			}
+		}
+		if (!hasRole) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, ProductErrorCode.INVALID_USER_ROLE.getMessage());
 		}
-
-		log.info("Access granted: User has required role {}", requiresRole.value());
 	}
 
 }
