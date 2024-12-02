@@ -53,7 +53,6 @@ public class CustomAddServerPortHeaderPostFilter implements GlobalFilter, Ordere
 						});
 				} else {
 					log.warn("Unable service ID for path: {}", exchange.getRequest().getURI().getPath());
-					addPortToResponse(exchange, "default-port");
 				}
 			}
 
@@ -70,9 +69,11 @@ public class CustomAddServerPortHeaderPostFilter implements GlobalFilter, Ordere
 	private String extractServiceId(String path) {
 		if (path.startsWith("/api/v1/products")) {
 			return "PRODUCT-SERVICE";
-		} else if (path.startsWith("/api/v1/auth")) {
-			return "AUTH-SERVICE";
-		} else if (path.startsWith("/api/v1/orders")) {
+		}
+		// else if (path.startsWith("/api/v1/auth")) {
+		// 	return "AUTH-SERVICE";
+		// }
+		else if (path.startsWith("/api/v1/orders")) {
 			return "ORDER-SERVICE"; // 추가: /api/v1/orders에 대해 올바른 서비스 ID 반환
 		}
 		return null;
