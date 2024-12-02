@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService{
 	public OrderResponse getOrder(Long orderId){
 		Order order = orderJpaRepository.findById(orderId)
 			.orElseThrow(() -> new IllegalArgumentException(new OrderException(OrderErrorCode.NOT_FOUND_ORDER)));
+		validateOrderInUser(order, AuthValidationContext.getUserId());
 		return new OrderResponse(order);
 	}
 
@@ -49,6 +50,12 @@ public class OrderServiceImpl implements OrderService{
 	@Transactional(readOnly = true)
 	public List<OrderResponse> getSearchOrder(){
 		return orderQueryRepository.getSearchOrder(AuthValidationContext.getUserId());
+	}
+
+	private void validateOrderInUser(Order order, Long userId){
+		if(!order.getUserId().equals(userId)){
+			throw new IllegalArgumentException(new OrderException(OrderErrorCode.NOT_FOUND_ORDER));
+		}
 	}
 
 
