@@ -10,6 +10,7 @@ import com.sparta.msa_exam.order.common.exception.OrderException;
 import com.sparta.msa_exam.order.context.AuthValidationContext;
 import com.sparta.msa_exam.order.dto.OrderRequest;
 import com.sparta.msa_exam.order.dto.OrderResponse;
+import com.sparta.msa_exam.order.dto.OrderUpdateRequest;
 import com.sparta.msa_exam.order.entity.Order;
 import com.sparta.msa_exam.order.entity.OrderProduct;
 import com.sparta.msa_exam.order.repository.OrderJpaRepository;
@@ -40,9 +41,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	@Transactional(readOnly = true)
 	public OrderResponse getOrder(Long orderId){
-		Order order = orderJpaRepository.findById(orderId)
-			.orElseThrow(() -> new IllegalArgumentException(new OrderException(OrderErrorCode.NOT_FOUND_ORDER)));
-		validateOrderInUser(order, AuthValidationContext.getUserId());
+		Order order = findByOrder(orderId);
 		return new OrderResponse(order);
 	}
 
@@ -52,10 +51,26 @@ public class OrderServiceImpl implements OrderService{
 		return orderQueryRepository.getSearchOrder(AuthValidationContext.getUserId());
 	}
 
+	@Override
+	@Transactional
+	public OrderResponse updateOrder(OrderUpdateRequest request, Long orderId){
+		Order order = findByOrder(orderId);
+		validateOrderInUser(order, AuthValidationContext.getUserId());
+		DeliveryRequest deliveryRequest = new DeliveryRequest(request.getDeliveryRequest());
+		order.updateDeliveryRequest(deliveryRequest);
+
+		return new OrderResponse(orderJpaRepository.save(order));
+	}
+
 	private void validateOrderInUser(Order order, Long userId){
 		if(!order.getUserId().equals(userId)){
 			throw new IllegalArgumentException(new OrderException(OrderErrorCode.NOT_FOUND_ORDER));
 		}
+	}
+
+	private Order findByOrder(Long orderId){
+		return orderJpaRepository.findById(orderId)
+			.orElseThrow(() -> new IllegalArgumentException(new OrderException(OrderErrorCode.NOT_FOUND_ORDER)));
 	}
 
 

@@ -65,6 +65,13 @@ public class Order {
 	}
 
 
+	public void updateDeliveryRequest(DeliveryRequest deliveryRequest){
+		this.deliveryRequest = deliveryRequest;
+	}
+
+
+
+
 
 
 }

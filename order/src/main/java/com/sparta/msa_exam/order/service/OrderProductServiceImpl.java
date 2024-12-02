@@ -21,12 +21,14 @@ import lombok.RequiredArgsConstructor;
 public class OrderProductServiceImpl implements OrderProductService{
 	private final OrderProductJpaRepository orderProductJpaRepository;
 	private final ProductService productService;
+
+	@Override
 	@Transactional
 	public List<OrderProduct> createOrderProduct(List<OrderProductRequest> orderProducts, Order order){
 		List<Long> productIds = orderProducts.stream().map(OrderProductRequest::getProductId).toList();
 		List<ProductResponse> productResponseList = productService.getProductsByIds(productIds);
 
-		List<OrderProduct> createdOrderProducts = productResponseList.stream()
+		return productResponseList.stream()
 			.map(productResponse -> {
 				OrderProductRequest matchingRequest = orderProducts.stream()
 					.filter(orderProductRequest -> orderProductRequest.getProductId().equals(productResponse.getId()))
@@ -37,7 +39,10 @@ public class OrderProductServiceImpl implements OrderProductService{
 				return OrderProduct.create(productResponse.getId(), quantity, productResponse.getPrice(), order);
 			})
 			.toList();
-		return createdOrderProducts;
 	}
+
+
+
+
 
 }
