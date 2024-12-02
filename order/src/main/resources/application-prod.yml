@@ -1,0 +1,9 @@
+server:
+  port: ${SERVER_PORT}
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DEFAULT_ZONE}
+

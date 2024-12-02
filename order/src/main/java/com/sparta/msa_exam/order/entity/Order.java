@@ -1,13 +1,15 @@
-package com.sparta.msa_exam.product.entity;
+package com.sparta.msa_exam.order.entity;
 
-import com.sparta.msa_exam.product.valueobject.Name;
-import com.sparta.msa_exam.product.valueobject.Price;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.persistence.Embedded;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,24 +22,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "p_product")
-public class Product {
+@Table(name = "p_order")
+public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	Long id;
 
-	@Embedded
-	private Name name;
-
-	@Embedded
-	private Price price;
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<OrderProduct> orderProducts = new ArrayList<>();
 
 
-	public static Product create(Name name, Price price){
-		return builder()
-			.name(name)
-			.price(price)
-			.build();
-	}
 
 }

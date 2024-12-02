@@ -1,13 +1,13 @@
-package com.sparta.msa_exam.product.entity;
+package com.sparta.msa_exam.order.entity;
 
-import com.sparta.msa_exam.product.valueobject.Name;
-import com.sparta.msa_exam.product.valueobject.Price;
-
-import jakarta.persistence.Embedded;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,24 +20,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "p_product")
-public class Product {
+@Table(name = "name = p_order_product")
+public class OrderProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	Long id;
 
-	@Embedded
-	private Name name;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "order_id", nullable = false)
+	private Order order;
 
-	@Embedded
-	private Price price;
+	@Column(name = "product_id", nullable = false)
+	Long productId;
 
+	@Column(name = "quantity", unique = false)
+	Long quantity;
 
-	public static Product create(Name name, Price price){
-		return builder()
-			.name(name)
-			.price(price)
-			.build();
-	}
 
 }

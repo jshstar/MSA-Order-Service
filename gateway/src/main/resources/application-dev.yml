@@ -10,11 +10,14 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path = /api/v1/order/**
         - id: product-service
           uri: lb://product-service
           predicates:
             - Path= /api/v1/products/**
-
         - id: auth-service
           uri: lb://auth-service
           predicates:
