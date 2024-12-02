@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductQueryRepositoryImpl implements ProductQueryRepository{
 
-	private JPAQueryFactory jpaQueryFactory;
+	private final JPAQueryFactory jpaQueryFactory;
 
 	QProduct qProduct = QProduct.product;
 	@Override
