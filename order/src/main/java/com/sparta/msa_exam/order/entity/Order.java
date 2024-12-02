@@ -3,10 +3,12 @@ package com.sparta.msa_exam.order.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sparta.msa_exam.order.valueobject.DeliveryRequest;
 import com.sparta.msa_exam.order.valueobject.TotalPrice;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +36,13 @@ public class Order {
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
-	@Column(name = "total_price", nullable = false)
+	@Embedded
+	private DeliveryRequest deliveryRequest;
+
+	@Embedded
 	private TotalPrice totalPrice;
+
+	@Column(name = "user_id")
+	private Long userId;
 
 }

@@ -3,6 +3,7 @@ package com.sparta.msa_exam.order.entity;
 import com.sparta.msa_exam.order.valueobject.Quantity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class OrderProduct {
 	@Column(name = "product_id", nullable = false)
 	private Long productId;
 
-	@Column(name = "quantity", nullable = false)
+	@Embedded
 	private Quantity quantity;
 
 
