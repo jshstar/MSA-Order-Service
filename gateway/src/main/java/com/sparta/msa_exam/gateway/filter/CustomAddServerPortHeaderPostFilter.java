@@ -4,7 +4,7 @@ import java.net.URI;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
+import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -14,23 +14,29 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
-public class CustomAddServerPortHeaderPostFilter implements GlobalFilter {
+public class CustomAddServerPortHeaderPostFilter implements GlobalFilter, Ordered{
 	private static final String SERVER_PORT_HEADER = "Server-Port";
 
 	@Override
-	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain){
-		log.info("gateway");
-		return chain.filter(exchange).then(Mono.fromRunnable(() -> addServerPortInResponseHeader(exchange)));
+	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		return chain.filter(exchange).then(Mono.defer(() -> {
+			URI targetUri = exchange.getAttribute("GATEWAY_REQUEST_URL_ATTR");
+
+			if (targetUri != null) {
+				String port = String.valueOf(targetUri.getPort());
+				ServerHttpResponse response = exchange.getResponse();
+				response.getHeaders().add(SERVER_PORT_HEADER, port);
+				log.info("Server Port: {}", port);
+			} else {
+				log.warn("GATEWAY_REQUEST_URL_ATTR is null");
+			}
+
+			return Mono.empty();
+		}));
 	}
 
-	private void addServerPortInResponseHeader(ServerWebExchange exchange){
-		URI uri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
-
-		if(uri != null){
-			String port = String.valueOf(uri.getPort());
-			ServerHttpResponse response = exchange.getResponse();
-			response.getHeaders().add(SERVER_PORT_HEADER,port);
-		}
+	@Override
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
 	}
-
 }

@@ -5,6 +5,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -19,7 +20,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
-public class JwtAuthenticationFilter implements GlobalFilter {
+public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
 	@Value("${service.jwt.secret-key}")
 	private String secretKey;
@@ -72,5 +73,10 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 		return path.equals("/api/v1/auth/signIn") ||
 			path.equals("/api/v1/auth/signUp") ||
 			path.equals("/api/v1/products");
+	}
+
+	@Override
+	public int getOrder() {
+		return 0;
 	}
 }
