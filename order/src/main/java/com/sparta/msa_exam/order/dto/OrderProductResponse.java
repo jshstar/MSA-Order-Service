@@ -2,9 +2,11 @@ package com.sparta.msa_exam.order.dto;
 
 import com.sparta.msa_exam.order.entity.OrderProduct;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class OrderProductResponse {
 	private Long productId;
 	private Integer quantity;

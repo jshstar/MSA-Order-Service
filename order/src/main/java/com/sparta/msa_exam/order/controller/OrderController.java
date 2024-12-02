@@ -1,7 +1,11 @@
 package com.sparta.msa_exam.order.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,21 @@ public class OrderController {
 	public ResponseEntity<OrderResponse> createOrder(
 		@RequestBody OrderRequest orderRequest
 	){
-		return ResponseEntity.status(HttpStatus.OK).body(orderService.createOrder(orderRequest));
+		return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(orderRequest));
 	}
+
+	@GetMapping("/orders/{orderId}")
+	@RequiresRole({"USER","ADMIN"})
+	public ResponseEntity<OrderResponse> getOrder(
+		@PathVariable Long orderId
+	){
+		return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrder(orderId));
+	}
+
+	@RequiresRole({"USER","ADMIN"})
+	@GetMapping("/orders")
+	public ResponseEntity<List<OrderResponse>> getSearchOrder(){
+		return ResponseEntity.status(HttpStatus.OK).body(orderService.getSearchOrder());
+	}
+
 }
