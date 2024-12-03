@@ -28,7 +28,7 @@ public class ProductController {
 	private final ProductService productService;
 
 	@PostMapping("/products")
-	@RequiresRole("ADMIN")
+	@RequiresRole({"USER","ADMIN"}) // 권한 테스트 임시변경
 	public ResponseEntity<ProductResponse> createProduct(
 		@RequestBody ProductRequest productRequest
 	){
