@@ -1,15 +1,17 @@
 package com.sparta.msa_exam.order.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
+
 import com.sparta.msa_exam.order.entity.OrderProduct;
+import com.sparta.msa_exam.order.valueobject.Quantity;
+import com.sparta.msa_exam.order.valueobject.TotalPrice;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class OrderProductResponse {
+public class OrderProductResponse implements Serializable {
 	private Long productId;
 	private Integer quantity;
 	private Integer totalPrice;
@@ -20,14 +22,13 @@ public class OrderProductResponse {
 		this.totalPrice = orderProduct.getTotalPrice().getValue();
 	}
 
-	@JsonCreator
 	public OrderProductResponse(
-		@JsonProperty("productId") Long productId,
-		@JsonProperty("quantity") Integer quantity,
-		@JsonProperty("totalPrice") Integer totalPrice
+		Long productId,
+		Quantity quantity,
+		TotalPrice totalPrice
 	) {
 		this.productId = productId;
-		this.quantity = quantity;
-		this.totalPrice = totalPrice;
+		this.quantity = quantity.getValue();
+		this.totalPrice = totalPrice.getValue();
 	}
 }

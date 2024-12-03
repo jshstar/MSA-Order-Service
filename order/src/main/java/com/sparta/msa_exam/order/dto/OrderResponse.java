@@ -1,42 +1,40 @@
 package com.sparta.msa_exam.order.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sparta.msa_exam.order.entity.Order;
+import com.sparta.msa_exam.order.entity.OrderProduct;
 import com.sparta.msa_exam.order.valueobject.DeliveryRequest;
+import com.sparta.msa_exam.order.valueobject.OrderTotalPrice;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class OrderResponse {
+public class OrderResponse implements Serializable {
 	private Long orderId;
 	private String deliveryRequest;
-	private List<OrderProductResponse> productIds;
+	private Integer totalPrice;
+	private List<Long> productIds;
 
-	public OrderResponse(Order order){
+	public OrderResponse(Order order) {
 		this.orderId = order.getId();
 		this.deliveryRequest = order.getDeliveryRequest().getValue();
-		this.productIds = order.getOrderProducts().stream().map(OrderProductResponse::new).toList();
+		this.totalPrice = order.getTotalPrice().getValue();
+		this.productIds = order.getOrderProducts().stream().map(OrderProduct::getProductId).toList();
 	}
 
-	@JsonCreator
 	public OrderResponse(
-		@JsonProperty("orderId") Long orderId,
-		@JsonProperty("deliveryRequest") String deliveryRequest,
-		@JsonProperty("productIds") List<OrderProductResponse> productIds
+		Long orderId,
+		DeliveryRequest deliveryRequest,
+		OrderTotalPrice orderTotalPrice,
+		List<Long> productIds
 	) {
 		this.orderId = orderId;
-		this.deliveryRequest = deliveryRequest;
-		this.productIds = productIds;
-	}
-
-	public OrderResponse(Long orderId, DeliveryRequest deliveryRequest, List<OrderProductResponse> productIds){
-		this.orderId = orderId;
 		this.deliveryRequest = deliveryRequest.getValue();
+		this.totalPrice = orderTotalPrice.getValue();
 		this.productIds = productIds;
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.msa_exam.order.aop.RequiresRole;
+import com.sparta.msa_exam.order.dto.OrderProductResponse;
 import com.sparta.msa_exam.order.dto.OrderRequest;
 import com.sparta.msa_exam.order.dto.OrderResponse;
 import com.sparta.msa_exam.order.dto.OrderUpdateRequest;
@@ -36,7 +37,7 @@ public class OrderController {
 
 	@GetMapping("/orders/{orderId}")
 	@RequiresRole({"USER","ADMIN"})
-	public ResponseEntity<OrderResponse> getOrder(
+	public ResponseEntity<List<OrderProductResponse>> getOrder(
 		@PathVariable Long orderId
 	){
 		return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrder(orderId));
