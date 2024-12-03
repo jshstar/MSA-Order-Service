@@ -2,8 +2,29 @@ spring:
   config:
     activate:
       on-profile: prod
+  application:
+    name: ${ORDER_SERVICE_NAME}
+  datasource:
+    username: ${USER_NAME}
+    password: ${PASSWORD}
+    url: ${ORDER_DB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  data:
+    redis:
+      port: ${REDIS_PORT}
+      host: ${REDIS_HOST}
+
 server:
-  port: ${SERVER_PORT}
+  port: ${ORDER_SERVER_PORT}
 
 
 eureka:

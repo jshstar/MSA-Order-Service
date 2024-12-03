@@ -1,6 +1,26 @@
-server:
-  port: ${SERVER_PORT}
+spring:
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: ${AUTH_SERVICE_NAME}
+  datasource:
+    username: ${USER_NAME}
+    password: ${PASSWORD}
+    url: ${AUTH_DB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
+server:
+  port: ${AUTH_SERVER_PORT}
 
 eureka:
   client:

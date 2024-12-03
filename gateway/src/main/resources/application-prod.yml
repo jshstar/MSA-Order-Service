@@ -4,7 +4,7 @@ spring:
       on-profile: prod
 
 server:
-  port: ${SERVER_PORT}
+  port: ${GATEWAY_PORT}
 
 eureka:
   client:
