@@ -2,6 +2,8 @@ package com.sparta.msa_exam.order.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "orderIdCache", key = "#orderId")
 	public OrderResponse getOrder(Long orderId){
 		Order order = findByOrder(orderId);
 		return new OrderResponse(order);
@@ -48,11 +51,13 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<OrderResponse> getSearchOrder(){
-		return orderQueryRepository.getSearchOrder(AuthValidationContext.getUserId());
+		Long userId = AuthValidationContext.getUserId();
+		return orderQueryRepository.getSearchOrder(userId);
 	}
 
 	@Override
 	@Transactional
+	@CachePut(value = "orderIdCache", key = "#orderId")
 	public OrderResponse updateOrder(OrderUpdateRequest request, Long orderId){
 		Order order = findByOrder(orderId);
 		validateOrderInUser(order, AuthValidationContext.getUserId());

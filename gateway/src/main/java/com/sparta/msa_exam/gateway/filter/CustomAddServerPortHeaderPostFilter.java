@@ -70,11 +70,8 @@ public class CustomAddServerPortHeaderPostFilter implements GlobalFilter, Ordere
 		if (path.startsWith("/api/v1/products")) {
 			return "PRODUCT-SERVICE";
 		}
-		// else if (path.startsWith("/api/v1/auth")) {
-		// 	return "AUTH-SERVICE";
-		// }
 		else if (path.startsWith("/api/v1/orders")) {
-			return "ORDER-SERVICE"; // 추가: /api/v1/orders에 대해 올바른 서비스 ID 반환
+			return "ORDER-SERVICE";
 		}
 		return null;
 	}

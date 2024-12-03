@@ -2,6 +2,8 @@ package com.sparta.msa_exam.product.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
+	@CacheEvict(value = "productCache", key = "'allProducts'")
 	public ProductResponse createProduct(ProductRequest productRequest) {
 		Name name = new Name(productRequest.getName());
 		validateProduct(name);
@@ -37,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "productIdsCache", key = "#productIds")
 	public List<ProductResponse> getProductsByIds(List<Long> productIds){
 		List<ProductResponse> productList = productQueryRepository.getProductsByIds(productIds);
 		validateProducts(productIds, productList);
@@ -45,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "productCache", key = "'allProducts'")
 	public List<ProductResponse> getAllProduct(){
 		return productQueryRepository.getAllProduct();
 	}

@@ -4,13 +4,17 @@ import com.sparta.msa_exam.product.entity.Product;
 import com.sparta.msa_exam.product.valueobject.Name;
 import com.sparta.msa_exam.product.valueobject.Price;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductResponse {
-	private final Long id;
-	private final String name;
-	private final Integer price;
+	private Long id;
+	private String name;
+	private Integer price;
 
 	public ProductResponse(Product product){
 		this.id = product.getId();
