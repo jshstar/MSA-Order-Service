@@ -15,6 +15,7 @@ public enum OrderErrorCode {
 	PRODUCT_QUANTITY_NOT_MINUS(HttpStatus.BAD_REQUEST, "수량은 음수일 수 없습니다."),
 	TOTAL_PRICE_NOT_MINUS(HttpStatus.BAD_REQUEST, "수량은 음수일 수 없습니다."),
 	TOTAL_PRICE_EMPTY(HttpStatus.BAD_REQUEST, "총 가격이 비어있습니다."),
+	PRODUCT_SERVER_ERROR(HttpStatus.NOT_FOUND, "상품 요청 실패"),
 	ORDER_TOTAL_PRICE_NOT_MINUS(HttpStatus.BAD_REQUEST, "수량은 음수일 수 없습니다."),
 	ORDER_TOTAL_PRICE_EMPTY(HttpStatus.BAD_REQUEST, "총 가격이 비어있습니다."),
 	DELIVERY_REQUEST_EMPTY(HttpStatus.BAD_REQUEST, "요청사항은 필수입니다.");
