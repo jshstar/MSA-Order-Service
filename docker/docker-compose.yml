@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: eureka-0.0.1-SNAPSHOT.jar
+    container_name: eureka-server
+    ports:
+      - "19090:19090"
+    environment:
+      - SERVER_NAME=server
+      - SERVER_PORT=19090
+      - SERVER_DEFAULT_ZONE=${SERVER_DEFAULT_ZONE}
+      - HOST_NAME=${HOST_NAME}
+    networks:
+      - app-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: auth-0.0.1-SNAPSHOT.jar
+    container_name: auth-service
+    ports:
+      - "19095:19095"
+    environment:
+      - USER_NAME=${RDS_USERNAME}
+      - PASSWORD=${RDS_PASSWORD}
+      - AUTH_SERVICE_NAME=auth-service
+      - AUTH_DB_URL=${AUTH_DB_URL}
+      - DEFAULT_ZONE=${DEFAULT_ZONE}
+      - AUTH_SERVER_PORT=19095
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    depends_on:
+      - eureka-server
+    networks:
+      - app-network
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: gateway-0.0.1-SNAPSHOT.jar
+    container_name: gateway-service
+    ports:
+      - "19091:19091"
+    environment:
+      - GATEWAY_NAME=gateway-service
+      - DEFAULT_ZONE=${DEFAULT_ZONE}
+      - GATEWAY_PORT=${GATEWAY_PORT}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    depends_on:
+      - eureka-server
+      - auth-service
+      - order-service
+      - product-service
+    networks:
+      - app-network
+
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: order-0.0.1-SNAPSHOT.jar
+    container_name: order-service
+    ports:
+      - "19092:19092"
+    environment:
+      - ORDER_SERVICE_NAME=order-service
+      - ORDER_DB_URL=${ORDER_DB_URL}
+      - DEFAULT_ZONE=${DEFAULT_ZONE}
+      - ORDER_SERVER_PORT=19092
+      - USER_NAME=${RDS_USERNAME}
+      - PASSWORD=${RDS_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      - eureka-server
+      - redis
+    networks:
+      - app-network
+
+  product-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: product-0.0.1-SNAPSHOT.jar
+    container_name: product-service
+    ports:
+      - "19093:19093"
+    environment:
+      - PRODUCT_SERVICE_NAME=product-service
+      - PRODUCT_DB_URL=${PRODUCT_DB_URL}
+      - DEFAULT_ZONE=${DEFAULT_ZONE}
+      - PRODUCT_SERVER_PORT=19093
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - USER_NAME=${RDS_USERNAME}
+      - PASSWORD=${RDS_PASSWORD}
+    depends_on:
+      - eureka-server
+      - redis
+    networks:
+      - app-network
+
+  product-service-2:
+    image: ubuntu-product-service 
+    container_name: product-service-2
+    ports:
+      - "19094:19094"
+    environment:
+      - PRODUCT_SERVICE_NAME=product-service
+      - PRODUCT_DB_URL=${PRODUCT_DB_URL}
+      - DEFAULT_ZONE=${DEFAULT_ZONE}
+      - PRODUCT_SERVER_PORT=19094
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - USER_NAME=${RDS_USERNAME}
+      - PASSWORD=${RDS_PASSWORD}
+    depends_on:
+      - eureka-server
+      - redis
+    networks:
+      - app-network
+
+
+  
+
+  redis:
+    image: redis:latest
+    container_name: ${REDIS_HOST}
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
