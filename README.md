@@ -1,21 +1,16 @@
 # MSA-Order-Service
-
 <hr>
 
 ### 기간 - 2024-11-27 ~ 2024-12-04
-
 <hr>
 
 ## Service Architecture
-
 <hr>
 
 ![img.png](img.png)
-
 <hr>
 
 ## 구현 목록
-
 <hr>
 
 - 가중치 라운드 로빈 형식 로드밸런싱
