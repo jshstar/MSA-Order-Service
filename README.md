@@ -1,24 +1,19 @@
----
-
 # MSA-Order-Service
-
----
-
-### 기간 - 2024-11-27 ~ 2024-12-04
-
----
+<br>
+기간 - 2024-11-27 ~ 2024-12-04
+<br>
 
 ## Service Architecture
 
----
+<br>
 
 ![img.png](img.png)
 
----
+<br>
 
 ## 구현 목록
 
----
+<br>
 
 - 가중치 라운드 로빈 형식 로드밸런싱
 - AOP를 이용한 Order, Product 권한 검증
