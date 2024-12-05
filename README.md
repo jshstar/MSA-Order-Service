@@ -6,7 +6,6 @@
 ## Service Architecture
 
 --- 
-
 ![img.png](img.png)
 
 ---
