@@ -6,8 +6,7 @@
 ## Service Architecture
 
 --- 
-![img.png](img.png)
-
+![img_1.png](img_1.png)
 ---
 
 ## 구현 목록
